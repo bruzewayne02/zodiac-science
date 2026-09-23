@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Zodiac Science</title>
+<meta name="description" content="A scientific zodiac personality assessment based on behavioral pattern analysis." />
+<style>
+  :root{
+    --bg:#0d0d12;
+    --card:#17171f;
+    --card2:#20202a;
+    --text:#f7f3ff;
+    --muted:#aaa5b5;
+    --accent:#d8b4fe;
+    --accent2:#93c5fd;
+    --border:rgba(255,255,255,.10);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(147,197,253,.14), transparent 28rem),
+      radial-gradient(circle at 80% 85%, rgba(216,180,254,.12), transparent 30rem),
+      var(--bg);
+    color:var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .wrap{
+    width:min(760px, calc(100% - 32px));
+    margin:0 auto;
+    padding:42px 0 64px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:28px;
+  }
+  .logo{
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .badge{
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:7px 10px;
+    font-size:12px;
+    color:var(--muted);
+    background:rgba(255,255,255,.03);
+  }
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:32px;
+    box-shadow:0 20px 70px rgba(0,0,0,.28);
+    backdrop-filter: blur(12px);
+  }
+  h1{
+    font-size:clamp(44px, 9vw, 78px);
+    line-height:.92;
+    letter-spacing:-.055em;
+    margin:0 0 18px;
+  }
+  h2{
+    font-size:clamp(28px, 5vw, 44px);
+    letter-spacing:-.035em;
+    line-height:1.05;
+    margin:0 0 14px;
+  }
+  p{
+    color:var(--muted);
+    line-height:1.6;
+    font-size:16px;
+  }
+  .lead{
+    font-size:19px;
+    max-width:560px;
+  }
+  .gradient{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  button{
+    appearance:none;
+    border:0;
+    cursor:pointer;
+    font:inherit;
+  }
+  .primary{
+    margin-top:18px;
+    padding:14px 18px;
+    border-radius:14px;
+    font-weight:700;
+    background:var(--text);
+    color:#111118;
+    transition:.2s transform,.2s opacity;
+  }
+  .primary:hover{transform:translateY(-1px)}
+  .primary:disabled{opacity:.35;cursor:not-allowed;transform:none}
+  .ghost{
+    margin-top:12px;
+    background:transparent;
+    color:var(--muted);
+    text-decoration:underline;
+    text-underline-offset:4px;
+  }
+  .progress{
+    height:7px;
+    border-radius:999px;
+    background:rgba(255,255,255,.07);
+    overflow:hidden;
+    margin-bottom:28px;
+  }
+  .progress > div{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    transition:width .25s ease;
+  }
+  .qnum{
+    text-transform:uppercase;
+    letter-spacing:.15em;
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:8px;
+  }
+  .answers{
+    display:grid;
+    gap:10px;
+    margin-top:24px;
+  }
+  .answer{
+    text-align:left;
+    background:var(--card2);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:15px 16px;
+    transition:.18s transform,.18s background,.18s border-color;
+  }
+  .answer:hover{
+    transform:translateY(-1px);
+    background:#262632;
+    border-color:rgba(255,255,255,.18);
+  }
+  .field{
+    margin-top:24px;
+  }
+  label{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  input[type=date]{
+    width:100%;
+    background:var(--card2);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:15px;
+    font:inherit;
+    color-scheme:dark;
+  }
+  .tiny{
+    font-size:12px;
+    color:#7e7989;
+    margin-top:10px;
+  }
+  .hidden{display:none !important}
+  .analysis{
+    text-align:center;
+    padding:28px 0 18px;
+  }
+  .orb{
+    width:110px;height:110px;border-radius:50%;
+    margin:0 auto 26px;
+    background:
+      radial-gradient(circle at 30% 30%, white 0 3%, transparent 4%),
+      radial-gradient(circle at 62% 28%, white 0 2%, transparent 3%),
+      radial-gradient(circle at 45% 65%, white 0 2%, transparent 3%),
+      radial-gradient(circle at 70% 72%, white 0 2%, transparent 3%),
+      radial-gradient(circle, rgba(216,180,254,.85), rgba(147,197,253,.45) 58%, rgba(255,255,255,.03) 70%);
+    box-shadow:0 0 55px rgba(216,180,254,.2);
+    animation:pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{transform:scale(.97);opacity:.78}
+    50%{transform:scale(1.03);opacity:1}
+  }
+  .analysis-line{
+    min-height:26px;
+    color:var(--muted);
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:13px;
+  }
+  .result-sign{
+    font-size:clamp(58px,12vw,96px);
+    font-weight:900;
+    letter-spacing:-.06em;
+    margin:8px 0;
+    line-height:.95;
+  }
+  .confidence{
+    display:inline-flex;
+    gap:7px;
+    align-items:center;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.03);
+    border-radius:999px;
+    padding:7px 10px;
+    font-size:12px;
+    color:var(--muted);
+    margin:10px 0 22px;
+  }
+  .reveal{
+    margin-top:26px;
+    padding-top:24px;
+    border-top:1px solid var(--border);
+  }
+  .actual{
+    font-size:18px;
+    color:var(--text);
+  }
+  .punch{
+    font-size:24px;
+    line-height:1.25;
+    color:var(--text);
+    font-weight:800;
+    letter-spacing:-.02em;
+    margin-top:20px;
+  }
+  .share-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:18px;
+  }
+  .share-row button{
+    padding:12px 14px;
+    border-radius:12px;
+    background:var(--card2);
+    color:var(--text);
+    border:1px solid var(--border);
+  }
+  footer{
+    text-align:center;
+    color:#6e6979;
+    font-size:12px;
+    margin-top:18px;
+  }
+  @media(max-width:560px){
+    .wrap{padding-top:22px}
+    .card{padding:24px 20px;border-radius:20px}
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="brand">
+      <div class="logo">Zodiac Science™</div>
+      <div class="badge">Peer reviewed — Cornel Astronomies</div>
+    </div>
+
+    <section id="intro" class="card">
+      <h1>We can guess your <span class="gradient">zodiac sign.</span></h1>
+      <p class="lead">Answer a few totally normal questions. Our advanced celestial personality model will identify your sign with shocking precision.</p>
+      <button id="startBtn" class="primary">Begin scientific assessment</button>
+      <p class="tiny">Behavioral responses are analyzed across multiple personality dimensions.</p>
+    </section>
+
+    <section id="quiz" class="card hidden">
+      <div class="progress"><div id="bar"></div></div>
+      <div id="qnum" class="qnum"></div>
+      <h2 id="question"></h2>
+      <div id="answers" class="answers"></div>
+    </section>
+
+    <section id="birthday" class="card hidden">
+      <div class="qnum">Final calibration</div>
+      <h2>One last thing.</h2>
+      <p>For extremely complicated scientific reasons, we need your birthday.</p>
+      <div class="field">
+        <label for="dob">Birthday</label>
+        <input id="dob" type="date" />
+      </div>
+      <button id="analyzeBtn" class="primary" disabled>Analyze my stars</button>
+      <p class="tiny">Your birth date is used for final astrological calibration.</p>
+    </section>
+
+    <section id="analyzing" class="card hidden">
+      <div class="analysis">
+        <div class="orb"></div>
+        <h2>Running celestial analysis…</h2>
+        <div id="analysisLine" class="analysis-line">Initializing horoscope engine…</div>
+      </div>
+    </section>
+
+    <section id="result" class="card hidden">
+      <div class="qnum">Scientific conclusion</div>
+      <p>Based on your behavioral profile, there is basically no question.</p>
+      <div id="predicted" class="result-sign gradient"></div>
+      <div class="confidence"><span>●</span><span id="confidence"></span> confidence</div>
+      <p id="reason"></p>
+
+      <div class="reveal">
+        <p class="actual">Your actual sign is <strong id="actual"></strong>.</p>
+        <p class="punch">Wow. Completely wrong.</p>
+        <p>It’s almost like your birth month has nothing to do with whether you prefer pancakes, answer texts quickly, or keep 37 browser tabs open.</p>
+        <p><strong>Obviously this test was nonsense. Astrology is dumb.</strong></p>
+
+        <div class="share-row">
+          <button id="againBtn">Prove astrology wrong again</button>
+          <button id="copyBtn">Copy my result</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>Zodiac Science™ — Behavioral Astrology Research</footer>
+  </main>
+
+<script>
+const questions = [
+  {
+    q:"You have a completely free Saturday. What sounds best?",
+    a:["Go somewhere new","Stay home and recharge","Make plans, then change them","Do whatever happens"]
+  },
+  {
+    q:"How early do you get to the airport?",
+    a:["Way too early","Exactly on time","Slightly late but calm","I am running"]
+  },
+  {
+    q:"Pick a breakfast.",
+    a:["Coffee counts","Something healthy","Pancakes or waffles","Whatever is closest"]
+  },
+  {
+    q:"Your plans get canceled. Your reaction?",
+    a:["Secretly thrilled","Actually disappointed","Immediately make new plans","I had forgotten anyway"]
+  },
+  {
+    q:"How many browser tabs do you have open right now?",
+    a:["1–5","6–15","16–40","I refuse to answer"]
+  },
+  {
+    q:"Choose a useless superpower.",
+    a:["Always find parking","Never wait in line","Know when someone is lying","Fall asleep instantly"]
+  },
+  {
+    q:"Someone sends you a long voice note.",
+    a:["Listen immediately","2x speed","Save it for later","Respond without listening"]
+  },
+  {
+    q:"Pick the most important household item.",
+    a:["A good couch","A good shower","A good fridge","A good Wi-Fi router"]
+  }
+];
+
+const signs = [
+  "Aries","Taurus","Gemini","Cancer","Leo","Virgo",
+  "Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"
+];
+
+const reasons = [
+  "Your airport timing and breakfast choices show classic fire-sign overconfidence.",
+  "Your answers indicate a rare alignment between snack preferences and unnecessary certainty.",
+  "The browser-tab data was especially revealing. The stars were practically yelling.",
+  "Your response pattern produced an extremely strong celestial vibe. We will not explain further.",
+  "Our model detected powerful cosmic energy in the way you feel about canceled plans.",
+  "Your household priorities created a statistically suspicious amount of zodiac information."
+];
+
+let index = 0;
+let answers = [];
+
+const el = id => document.getElementById(id);
+
+el("startBtn").onclick = () => {
+  el("intro").classList.add("hidden");
+  el("quiz").classList.remove("hidden");
+  renderQuestion();
+};
+
+function renderQuestion(){
+  const item = questions[index];
+  el("qnum").textContent = `Question ${index+1} of ${questions.length}`;
+  el("question").textContent = item.q;
+  el("bar").style.width = `${(index/questions.length)*100}%`;
+  el("answers").innerHTML = "";
+  item.a.forEach((text, i)=>{
+    const b = document.createElement("button");
+    b.className = "answer";
+    b.textContent = text;
+    b.onclick = () => {
+      answers.push(i);
+      index++;
+      if(index < questions.length){
+        renderQuestion();
+      }else{
+        el("bar").style.width = "100%";
+        setTimeout(()=>{
+          el("quiz").classList.add("hidden");
+          el("birthday").classList.remove("hidden");
+        },180);
+      }
+    };
+    el("answers").appendChild(b);
+  });
+}
+
+el("dob").addEventListener("input", () => {
+  el("analyzeBtn").disabled = !el("dob").value;
+});
+
+function zodiacFromDate(dateString){
+  const d = new Date(dateString + "T12:00:00");
+  const m = d.getMonth()+1;
+  const day = d.getDate();
+  if ((m==3 && day>=21)||(m==4 && day<=19)) return "Aries";
+  if ((m==4 && day>=20)||(m==5 && day<=20)) return "Taurus";
+  if ((m==5 && day>=21)||(m==6 && day<=20)) return "Gemini";
+  if ((m==6 && day>=21)||(m==7 && day<=22)) return "Cancer";
+  if ((m==7 && day>=23)||(m==8 && day<=22)) return "Leo";
+  if ((m==8 && day>=23)||(m==9 && day<=22)) return "Virgo";
+  if ((m==9 && day>=23)||(m==10 && day<=22)) return "Libra";
+  if ((m==10 && day>=23)||(m==11 && day<=21)) return "Scorpio";
+  if ((m==11 && day>=22)||(m==12 && day<=21)) return "Sagittarius";
+  if ((m==12 && day>=22)||(m==1 && day<=19)) return "Capricorn";
+  if ((m==1 && day>=20)||(m==2 && day<=18)) return "Aquarius";
+  return "Pisces";
+}
+
+function pseudoHash(){
+  return answers.reduce((acc, n, i)=>acc + (n+1)*(i+3), 17);
+}
+
+el("analyzeBtn").onclick = () => {
+  const dob = el("dob").value;
+  const actual = zodiacFromDate(dob);
+
+  // Deterministic-ish result based on quiz answers, but guaranteed to be wrong.
+  let predictedIndex = pseudoHash() % signs.length;
+  if(signs[predictedIndex] === actual) predictedIndex = (predictedIndex + 5) % signs.length;
+  const predicted = signs[predictedIndex];
+
+  el("birthday").classList.add("hidden");
+  el("analyzing").classList.remove("hidden");
+
+  const lines = [
+    "Measuring breakfast-to-personality correlation…",
+    "Checking Mercury for suspicious activity…",
+    "Cross-referencing browser tab entropy…",
+    "Cross-referencing astronomical reference data…",
+    "Converting vibes into scientific-looking numbers…",
+    "Finalizing cosmic certainty…"
+  ];
+
+  let step = 0;
+  const timer = setInterval(()=>{
+    el("analysisLine").textContent = lines[step];
+    step++;
+    if(step === lines.length){
+      clearInterval(timer);
+      setTimeout(()=>showResult(predicted, actual), 550);
+    }
+  }, 520);
+};
+
+function showResult(predicted, actual){
+  const confidence = 96 + (pseudoHash() % 4) + "." + ((pseudoHash()*7)%10) + "%";
+  el("predicted").textContent = predicted;
+  el("confidence").textContent = confidence;
+  el("reason").textContent = reasons[pseudoHash() % reasons.length];
+  el("actual").textContent = actual;
+  el("analyzing").classList.add("hidden");
+  el("result").classList.remove("hidden");
+}
+
+el("againBtn").onclick = () => location.reload();
+
+el("copyBtn").onclick = async () => {
+  const text = `Zodiac Science guessed I was ${el("predicted").textContent}. I’m actually ${el("actual").textContent}. 99-ish% confidence. 0% accuracy.`;
+  try{
+    await navigator.clipboard.writeText(text);
+    el("copyBtn").textContent = "Copied";
+    setTimeout(()=>el("copyBtn").textContent="Copy my result",1400);
+  }catch{
+    alert(text);
+  }
+};
+</script>
+</body>
+</html>
